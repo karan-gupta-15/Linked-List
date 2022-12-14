@@ -1,0 +1,133 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct nodetype{
+	int data;
+	struct nodetype* add;
+}node;
+void insertatend(node **head,int data)
+{
+	node *temp;
+	node *ptr;
+	ptr=(node*)malloc(sizeof(node));
+	ptr->data=data;
+	ptr->add=NULL;
+	if(*head==NULL)
+	*head=ptr;
+	else
+	{
+	temp=*head;
+	while(temp->add!=NULL)
+	temp=temp->add;
+	temp->add=ptr;
+	}
+}
+void insertatfront(node **head,int data)
+{
+	node *ptr;
+	ptr=(node*)malloc(sizeof(node));
+	ptr->data=data;
+	ptr->add=*head;
+	*head=ptr;
+}
+void insertafter(node **head,int data,int dataafter)
+{
+	node *temp;
+	node *ptr;
+	ptr=(node*)malloc(sizeof(node));
+	ptr->data=data;
+	ptr->add=NULL;
+	temp=*head;
+	while(temp->data!=dataafter)
+	temp=temp->add;
+	ptr->add=temp->add;
+	temp->add=ptr;
+}
+void printll(node *head)
+{
+	while(head!=NULL)
+	{
+		printf("%d->",head->data);
+		head=head->add;
+	}
+}
+void deleteatend(node **head)
+{
+node* s=*head;
+while(s->add->add!=NULL)
+{ s=s->add;}
+free(s->add);
+s->add=NULL;
+}
+
+void deleteatbeg(node **head)
+{
+    node* temp;
+    temp=*head;
+    *head=(*head)->add;
+    free(temp);
+}
+void deleteatspecificatloc(node **head, int pos)
+{
+    node* s;
+    pos--;
+    s=*head;
+    node* temp;
+    while(pos>1)
+    {
+        s=s->add;
+        pos--;
+    }
+    temp=s->add;
+    s->add=s->add->add;
+    free(temp);
+}
+int main()
+{
+	int choice;
+	int dataafter;
+	int data;
+	node *head;
+	head=NULL;
+	while(1)
+	{
+	    int pos;
+		printf("Enter Your Choice :");
+		scanf("%d",&choice);
+		switch(choice)
+		{
+			case 1: printf("Enter the data.");
+					scanf("%d",&data);
+					insertatend(&head,data);
+					break;
+			case 2:
+					printf("Enter the data.");
+					scanf("%d",&data);
+					insertatfront(&head,data);
+					break;
+			case 3:
+					printf("Enter the data.");
+					scanf("%d",&data);
+					printf("Enter the afterelement:");
+					scanf("%d",&dataafter);
+					insertafter(&head,data,dataafter);
+					break;
+			case 4:
+					printll(head);
+					break;
+			case 5: 
+			      printf("deleting element");
+			      deleteatend(&head);
+			      break;
+			case 6:
+			        deleteatbeg(&head);
+			        break;
+			case 7:
+			        scanf("%d",&pos);
+			        deleteatspecificatloc(&head,pos);
+			        break;
+			default:
+					exit(1);
+		}
+	}
+	return 0;
+}
